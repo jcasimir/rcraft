@@ -8,6 +8,7 @@ class Game
   end
 
   def tick
+    board.tick
     self.clock += 1
   end
 end

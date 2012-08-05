@@ -23,6 +23,11 @@ describe Game do
     it "advances the clock" do
       expect{ game.tick }.to change{ game.clock }.by(1)
     end
+
+    it "tells the board to tick" do
+      game.board.should_receive :tick
+      game.tick
+    end
   end
 
   context "#players" do

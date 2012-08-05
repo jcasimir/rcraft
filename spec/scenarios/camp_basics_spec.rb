@@ -21,12 +21,12 @@ describe "Placing a Camp" do
     board.buildings.count.should == 1
   end
 
-  it "creates a villager" do
-    player.villagers.should == 0
+  it "can create a villager" do
+    player.villagers.count.should == 0
     camp.create_villager
     camp.training_time_for(:villager).times do
       game.tick
     end
-    player.villagers.should == 1
+    player.villagers.count.should == 1
   end
 end

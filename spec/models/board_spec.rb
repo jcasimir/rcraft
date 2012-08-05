@@ -17,21 +17,34 @@ describe Board do
     def placed(coords); end
   end
 
-  let(:building){ Building.new }
+  context "with no buildings" do
+    let(:building){ Building.new }
 
-  context "#place" do
-    it "adds a building" do      
-      board.place(building, [0,0])
-      board.buildings.should include(building)
-    end
+    context "#place" do
+      it "adds a building" do      
+        board.place(building, [0,0])
+        board.buildings.should include(building)
+      end
 
-    it "uses a location" do
-      board.place(building, [2,2])
-      board.entities_at([2,2]).should include(building)
-    end
+      it "uses a location" do
+        board.place(building, [2,2])
+        board.entities_at([2,2]).should include(building)
+      end
+    end    
   end
 
-  context "#entities_at" do
+  context "with buildings" do
+    let(:building){
+      Building.new.tap do |b|
+        board.place(b, [0,0])
+      end
+    }
 
+    context "#tick" do
+      it "tells buildings to tick" do
+        building.should_receive :tick
+        board.tick
+      end
+    end
   end
 end

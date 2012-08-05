@@ -9,6 +9,10 @@ class Board
     @grid = build_grid(size)
   end
 
+  def tick
+    buildings.each(&:tick)
+  end
+
   def place(building, coordinates)
     grid[coordinates] << building
     buildings << building

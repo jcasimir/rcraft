@@ -16,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = Rcraft::VERSION
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "guard-rspec"
+  gem.add_development_dependency "ruby_gntp"
 end
