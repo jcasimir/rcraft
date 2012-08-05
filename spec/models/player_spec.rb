@@ -13,4 +13,10 @@ describe Player do
       player.name.length.should > 0
     end
   end
+
+  context ".buildings" do
+    it "starts empty" do
+      player.buildings.should be_empty
+    end
+  end
 end
