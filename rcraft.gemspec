@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "rcraft"
   gem.require_paths = ["lib"]
   gem.version       = Rcraft::VERSION
+  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "guard-rspec"
 end
