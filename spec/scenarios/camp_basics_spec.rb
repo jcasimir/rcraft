@@ -29,4 +29,16 @@ describe "Placing a Camp" do
     end
     player.villagers.count.should == 1
   end
+
+  it "can queue villagers" do
+    camp.training_slots = 1
+    camp.set_training_time_for(:villager, 2)
+    villager_1 = camp.create_villager
+    villager_2 = camp.create_villager
+    camp.in_progress.should include(villager_1)
+    camp.in_progress.should_not include(villager_2)
+    2.times{ camp.tick }
+    camp.in_progress.should_not include(villager_1)
+    camp.in_progress.should include(villager_2)
+  end
 end

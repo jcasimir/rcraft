@@ -1,7 +1,12 @@
 require 'spec_helper'
 
 describe Camp do
-  let(:camp){ Camp.new }
+  class DummyPlayer
+    def add_entity(entity); end
+  end
+
+  let(:player){ DummyPlayer.new }
+  let(:camp){ Camp.new(player) }
 
   context ".new" do
     it "takes a player" do
@@ -16,13 +21,21 @@ describe Camp do
   end
 
   context "#create_villager" do
-    it "begins creating a villager" do
-      camp.create_villager.should be_kind_of(Villager)
+    context "when a slot is available" do
+      it "begins creating a villager" do
+        camp.training_slots = 1
+        villager = camp.create_villager
+        camp.in_progress.should include(villager)
+      end
     end
 
-    it "puts that villager into the build process" do
-      camp.create_villager
-      camp.in_progress.any?{|e| e.respond_to?(:villager?) && e.villager?}.should be
+    context "when slots are filled" do
+      it "adds them to the queue" do
+        camp.training_slots = 0
+        villager = camp.create_villager
+        camp.in_progress.should_not include(villager)
+        camp.training_queue.should include(villager)
+      end
     end
   end
 
@@ -37,6 +50,20 @@ describe Camp do
     it "advances any pending builds" do
       villager = camp.create_villager
       expect{ camp.tick }.to change{ villager.training_time_remaining }
+    end
+
+    class CompletedTraining
+      def done_training?; true; end
+      def tick; end
+    end
+
+    let(:completed_training){ CompletedTraining.new }
+
+    it "spawns completed trainings" do
+      camp.in_progress << completed_training
+      camp.in_progress.should include(completed_training)
+      camp.tick
+      camp.in_progress.should_not include(completed_training)
     end
   end
 
