@@ -53,7 +53,7 @@ describe Camp do
     end
 
     class CompletedTraining
-      def done_training?; true; end
+      def trained?; true; end
       def tick; end
     end
 

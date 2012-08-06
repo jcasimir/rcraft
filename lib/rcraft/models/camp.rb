@@ -1,6 +1,6 @@
 class Camp
   attr_accessor :player, :dimensions, :training_times, :in_progress, 
-                :training_slots, :training_queue
+                :training_slots, :training_queue, :board
 
   DEFAULT_DIMENSIONS = [2,2]
   DEFAULT_TRAINING_TIMES = { :villager => 20000 }
@@ -20,8 +20,9 @@ class Camp
     move_from_queue
   end
 
-  def placed(coordinates)
+  def placed_on(board)
     player.buildings << self
+    self.board = board
   end
 
   def create_villager
@@ -61,7 +62,7 @@ private
   def advance_progress
     in_progress.each do |entity|
       entity.tick
-      spawn_entity(entity) if entity.done_training?
+      spawn_entity(entity) if entity.trained?
     end
   end
 

@@ -36,4 +36,69 @@ describe Villager do
       villager.training_time_remaining.should == 0
     end
   end
+
+  context "#placed_on" do
+    it "sets the board" do
+      board = Board.new
+      villager.placed_on(board)
+      villager.board.should == board
+    end
+  end
+
+  context "#resources_value" do
+    it "is the total of carried resources" do
+      villager.resources_value.should == 0
+      villager.resources << ResourcePack.new(5)
+      villager.resources_value.should == 5
+    end
+  end
+
+  context "#train!" do
+    it "marks the villager as trained" do
+      villager.train!.should be_trained
+    end
+  end
+
+  context "#gather_resources" do
+    class DummyResourceDeposit
+      def gather(x)
+        {:value => x}
+      end
+    end
+
+    class DummyBoard
+      def resource_at(coordinates)
+        DummyResourceDeposit.new
+      end
+    end
+
+    before(:each) do
+      spawned_villager.placed_on(DummyBoard.new)
+      spawned_villager.time_to_gather_resources = 5
+      spawned_villager.gather_resources([1,1])
+    end
+
+    let(:spawned_villager) do
+      Villager.new(home).train!
+    end
+
+    it "does not initially gather anything" do
+      spawned_villager.resources.count.should == 0
+    end
+
+    it "does not gather anything mid-timer" do
+      spawned_villager.tick
+      spawned_villager.resources.count.should == 0
+    end
+
+    it "gathers exactly on the cycle" do
+      5.times{ spawned_villager.tick }
+      spawned_villager.resources.count.should == 1
+    end
+
+    it "gathers only every X cycles" do
+      11.times{ spawned_villager.tick }
+      spawned_villager.resources.count.should == 2
+    end
+  end
 end

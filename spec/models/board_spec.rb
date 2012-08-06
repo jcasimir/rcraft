@@ -13,12 +13,20 @@ describe Board do
     end
   end
 
-  class Building
-    def placed(coords); end
+  context "#spawn_resources" do
+    it "creates resources" do
+      board.resource_value_at([0,0]).should == 0
+      board.spawn_resource(ResourceDeposit.new(5), [0,0])
+      board.resource_value_at([0,0]).should == 5
+    end
+  end
+
+  class DummyBuilding
+    def placed_on(board); end
   end
 
   context "with no buildings" do
-    let(:building){ Building.new }
+    let(:building){ DummyBuilding.new }
 
     context "#place" do
       it "adds a building" do      
@@ -35,7 +43,7 @@ describe Board do
 
   context "with buildings" do
     let(:building){
-      Building.new.tap do |b|
+      DummyBuilding.new.tap do |b|
         board.place(b, [0,0])
       end
     }

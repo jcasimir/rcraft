@@ -7,7 +7,7 @@ describe "Placing a Camp" do
   let(:camp){ Camp.new(player) }
 
   def build_camp(coordinates = [0,0])
-    board.place(camp, [0,0])
+    board.place(camp, coordinates)
   end
 
   before(:each) do

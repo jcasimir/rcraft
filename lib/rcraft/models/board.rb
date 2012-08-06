@@ -16,11 +16,24 @@ class Board
   def place(building, coordinates)
     grid[coordinates] << building
     buildings << building
-    building.placed(coordinates)
+    building.placed_on(self)
   end
 
   def entities_at(coordinates)
     grid[coordinates]
+  end
+
+  def resource_value_at(coordinates)
+    resource = resource_at(coordinates)
+    resource ? resource.value : 0
+  end
+
+  def resource_at(coordinates)
+    entities_at(coordinates).detect{|e| e.resources?}
+  end
+
+  def spawn_resource(resource, coordinates)
+    grid[coordinates] << resource
   end
 
 private
