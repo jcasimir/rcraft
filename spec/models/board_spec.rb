@@ -31,7 +31,7 @@ describe Board do
     context "#place" do
       it "adds a building" do      
         board.place(building, [0,0])
-        board.buildings.should include(building)
+        board.entities.should include(building)
       end
 
       it "uses a location" do
@@ -53,6 +53,35 @@ describe Board do
         building.should_receive :tick
         board.tick
       end
+    end
+  end
+
+  class DummyVillager
+    def placed_on(board); end
+  end
+
+  let(:villager){ DummyVillager.new }
+
+  context "#coordinates_for" do
+    it "finds the coordinates for an existing entity" do
+      board.place(villager, [2,2])
+      board.coordinates_for(villager).should == [2,2]
+    end
+
+    it "does not find an unspawned entity"
+  end
+
+  context "#move" do
+    it "moves the entity to the new relative position" do
+      board.place(villager, [2,2])
+      board.move(villager, [4,4])
+      board.coordinates_for(villager).should == [6,6]
+    end
+
+    it "does not leave the entity in the old position" do
+      board.place(villager, [2,2])
+      board.move(villager, [4,4])
+      board.entities_at([2,2]).should_not include(villager)
     end
   end
 end

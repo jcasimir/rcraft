@@ -18,7 +18,7 @@ describe "Placing a Camp" do
 
   it "builds a camp" do
     player.buildings.count.should == 1
-    board.buildings.count.should == 1
+    board.entities.count.should == 1
   end
 
   it "can create a villager" do

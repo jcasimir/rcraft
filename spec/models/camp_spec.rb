@@ -78,5 +78,7 @@ describe Camp do
       camp_with_player.spawn_entity(villager)
       camp_with_player.in_progress.should_not include(villager)
     end
+
+    it "puts the entity on the board"
   end
 end

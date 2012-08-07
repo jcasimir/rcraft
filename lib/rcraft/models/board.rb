@@ -1,22 +1,27 @@
 class Board
-  attr_accessor :size, :buildings, :grid
+  attr_accessor :size, :entities, :grid
 
   DEFAULT_SIZE = [100,100]
 
   def initialize(param_size = DEFAULT_SIZE)
     @size = param_size
-    @buildings = []
+    @entities = []
     @grid = build_grid(size)
   end
 
   def tick
-    buildings.each(&:tick)
+    entities.each(&:tick)
   end
 
-  def place(building, coordinates)
-    grid[coordinates] << building
-    buildings << building
-    building.placed_on(self)
+  def place(entity, coordinates)
+    grid[coordinates] << entity
+    entities << entity
+    entity.placed_on(self)
+  end
+
+  def coordinates_for(entity)
+    coords, e = grid.detect{|coordinates, entities| entities.include?(entity)}
+    return coords
   end
 
   def entities_at(coordinates)
@@ -34,6 +39,13 @@ class Board
 
   def spawn_resource(resource, coordinates)
     grid[coordinates] << resource
+  end
+
+  def move(entity, offset)
+    current = coordinates_for(entity)
+    grid[current].delete(entity)
+    target = CoordinateCalculator.add(current,offset)
+    grid[target] << entity
   end
 
 private
