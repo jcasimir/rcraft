@@ -1,5 +1,5 @@
 class Board
-  attr_accessor :size, :entities, :grid
+  attr_accessor :size, :entities, :grid, :terrain
 
   DEFAULT_SIZE = [100,100]
 
@@ -7,6 +7,7 @@ class Board
     @size = param_size
     @entities = []
     @grid = build_grid(size)
+    @terrain = {}
   end
 
   def tick
@@ -46,6 +47,14 @@ class Board
     grid[current].delete(entity)
     target = CoordinateCalculator.add(current,offset)
     grid[target] << entity
+  end
+
+  def make_terrain(type, coordinates)
+    self.terrain[coordinates] = Terrain::Builder.build(type)
+  end
+
+  def terrain_at(coordinates)
+    terrain[coordinates]
   end
 
 private

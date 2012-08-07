@@ -84,4 +84,16 @@ describe Board do
       board.entities_at([2,2]).should_not include(villager)
     end
   end
+
+  context "#make_terrain" do
+    it "builds a water tile" do
+      board.make_terrain(:water,[0,0])
+      board.terrain_at([0,0]).should be_a(Terrain::Water)
+    end
+
+    it "builds a land tile" do
+      board.make_terrain(:land,[0,0])
+      board.terrain_at([0,0]).should be_a(Terrain::Land)
+    end
+  end
 end
