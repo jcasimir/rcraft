@@ -1,6 +1,8 @@
 require 'rcraft/version'
 require 'rcraft/lib/coordinate_calculator'
 require 'rcraft/lib/movable'
+require 'rcraft/lib/gatherer'
+require 'rcraft/lib/trainable'
 require 'rcraft/path_strategies/path'
 require 'rcraft/path_strategies/villager'
 require 'rcraft/models/board'
