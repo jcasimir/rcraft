@@ -1,10 +1,6 @@
 module PathStrategy
   module Villager
     attr_accessor :path
-    
-    def set_path_to(target)
-      self.path = path_to(target)
-    end
 
     def path_to(target)
       start = board.coordinates_for(self)

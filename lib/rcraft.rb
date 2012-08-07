@@ -1,7 +1,8 @@
-require "rcraft/version"
+require 'rcraft/version'
+require 'rcraft/lib/coordinate_calculator'
+require 'rcraft/lib/movable'
 require 'rcraft/path_strategies/path'
 require 'rcraft/path_strategies/villager'
-require 'rcraft/lib/coordinate_calculator'
 require 'rcraft/models/board'
 require 'rcraft/models/game'
 require 'rcraft/models/player'
