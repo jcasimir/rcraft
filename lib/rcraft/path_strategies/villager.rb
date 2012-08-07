@@ -1,27 +1,13 @@
 module PathStrategy
-  class Villager
+  module Villager
     attr_accessor :path
-
-    def initialize(entity, target, board)
-      @path = find_path(entity, target, board)
+    
+    def set_path_to(target)
+      self.path = path_to(target)
     end
 
-    def next
-      path.last
-    end
-
-    def next!
-      path.pop
-    end
-
-    def empty?
-      path.empty?
-    end
-
-  private
-
-    def find_path(entity, target, board)
-      start = board.coordinates_for(entity)
+    def path_to(target)
+      start = board.coordinates_for(self)
       x_differential = target.first - start.first
       y_differential = target.last - start.last
       results = []
@@ -42,7 +28,7 @@ module PathStrategy
 
         results << [x,y]
       end
-      results
+      Path.new(results)
     end
   end
 end

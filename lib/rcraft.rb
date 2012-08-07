@@ -1,4 +1,5 @@
 require "rcraft/version"
+require 'rcraft/path_strategies/path'
 require 'rcraft/path_strategies/villager'
 require 'rcraft/lib/coordinate_calculator'
 require 'rcraft/models/board'

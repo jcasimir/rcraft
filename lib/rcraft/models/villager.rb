@@ -1,12 +1,12 @@
 class Villager
   attr_accessor :home, :player, :training_time_remaining, :board, 
                 :resources, :gathering_timer, :resource_gather_rate,
-                :gathering_at, :moving_timer, :path, :path_strategy
+                :gathering_at, :moving_timer
 
   DEFAULT_TIME_TO_GATHER_RESOURCES = 2000
   DEFAULT_RESOURCE_GATHER_RATE = 10
   DEFAULT_TIME_TO_MOVE = 500
-  DEFAULT_PATH_STRATEGY = PathStrategy::Villager
+  include PathStrategy::Villager
 
   def initialize(home)
     @home = home
@@ -16,7 +16,6 @@ class Villager
     @resource_gather_rate = DEFAULT_RESOURCE_GATHER_RATE
     @gathering_timer = Timer.new(DEFAULT_TIME_TO_GATHER_RESOURCES)
     @moving_timer = Timer.new(DEFAULT_TIME_TO_MOVE)
-    @path_strategy = DEFAULT_PATH_STRATEGY
   end
 
   def villager?
@@ -87,7 +86,7 @@ class Villager
   end
 
   def move_to(coordinates)
-    self.path = path_strategy.new(self, coordinates, board)
+    set_path_to(coordinates)
   end
 
   def attempt_to_move
