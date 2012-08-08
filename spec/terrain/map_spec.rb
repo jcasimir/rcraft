@@ -68,5 +68,12 @@ describe Terrain::Map do
       map.water_coverage.should == 0
     end
 
+    it "generates the identical map twice when the seed matches" do
+      Terrain::Map.new(:seed => 10).should == Terrain::Map.new(:seed => 10)
+    end
+
+    it "generates different maps when the seed changes" do
+      Terrain::Map.new(:seed => 10).should_not == Terrain::Map.new(:seed => 9)
+    end
   end
 end

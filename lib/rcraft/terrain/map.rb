@@ -2,7 +2,7 @@ module Terrain
   class Map
     attr_accessor :dimensions, :seed, :tiles
 
-    DEFAULT_DIMENSIONS = [100,100]
+    DEFAULT_DIMENSIONS = [5,10]
 
     def initialize(params = {})
       @dimensions = params[:dimensions] || DEFAULT_DIMENSIONS
