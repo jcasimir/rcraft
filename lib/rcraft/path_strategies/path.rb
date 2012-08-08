@@ -17,11 +17,11 @@ module PathStrategy
     end
 
     def next
-      path.last
+      path.first
     end
 
     def next!
-      path.pop
+      path.shift
     end
 
     def empty?

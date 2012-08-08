@@ -49,10 +49,9 @@ class Board
     grid[coordinates] << resource
   end
 
-  def move(entity, offset)
+  def move(entity, target)
     current = coordinates_for(entity)
     grid[current].delete(entity)
-    target = CoordinateCalculator.add(current,offset)
     grid[target] << entity
   end
 

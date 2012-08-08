@@ -54,7 +54,7 @@ describe PathStrategy::Villager do
       let(:target){ [3,0] }
 
       it "returns the correct moves" do
-        villager.path_to(target).should == [[1,0], [1,0], [1,0]]
+        villager.path_to(target).should == [[1,0], [2,0], [3,0]]
       end
     end
 
@@ -62,7 +62,7 @@ describe PathStrategy::Villager do
       let(:target){ [0,3] }
 
       it "returns the correct moves" do
-        villager.path_to(target).should == [[0,1], [0,1], [0,1]]
+        villager.path_to(target).should == [[0,1], [0,2], [0,3]]
       end
     end
   end

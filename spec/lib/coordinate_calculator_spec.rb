@@ -15,6 +15,12 @@ describe CoordinateCalculator do
            [1,2],        [3,2], 
            [1,3], [2,3], [3,3]].sort
       end
+
+      it "does not return negative coordinates" do
+        CoordinateCalculator.surrounding([0,0]).sort.should == 
+          [       [1,0], 
+           [0,1], [1,1]].sort
+      end
     end
 
     context "with a distance of 2" do

@@ -11,35 +11,35 @@ describe "Villager moves" do
     it "goes in a straight line" do
       board.place(villager, [0,0])
       villager.move_to([5,0])
-      (villager.time_to_move * 5).times{ board.tick }
+      board.tick while villager.moving?
       board.coordinates_for(villager).should == [5,0]
     end
 
     it "goes diagonally" do
       board.place(villager, [0,0])
       villager.move_to([3,3])
-      (villager.time_to_move * 3).times{ board.tick }
+      board.tick while villager.moving?
       board.coordinates_for(villager).should == [3,3]
     end
 
     it "can walk more X than Y" do
       board.place(villager, [0,0])
       villager.move_to([5,3])
-      (villager.time_to_move * 5).times{ board.tick }
+      board.tick while villager.moving?
       board.coordinates_for(villager).should == [5,3]
     end
 
     it "can walk more Y than X" do
       board.place(villager, [0,0])
       villager.move_to([3,5])
-      (villager.time_to_move * 5).times{ board.tick }
+      board.tick while villager.moving?
       board.coordinates_for(villager).should == [3,5]
     end
 
     it "can't walk off the map" do
       board.place(villager, [0,0])
       villager.move_to([-1, -1])
-      villager.time_to_move.times{ board.tick }
+      board.tick while villager.moving?
       board.coordinates_for(villager).should == [0,0]
     end
   end

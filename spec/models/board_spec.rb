@@ -97,7 +97,7 @@ describe Board do
     it "moves the entity to the new relative position" do
       board.place(villager, [2,2])
       board.move(villager, [4,4])
-      board.coordinates_for(villager).should == [6,6]
+      board.coordinates_for(villager).should == [4,4]
     end
 
     it "does not leave the entity in the old position" do

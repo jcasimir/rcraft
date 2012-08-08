@@ -22,7 +22,8 @@ module PathStrategy
           test_path = path << current
 
           if current == goal
-            return Path.new_from_absolutes(test_path)
+            test_path.shift
+            return Path.new(test_path)
           else
             past << current
 
