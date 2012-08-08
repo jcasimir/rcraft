@@ -8,7 +8,7 @@ module CoordinateCalculator
     results = []
     (-distance..distance).each do |x_differential|
       (-distance..distance).each do |y_differential|
-        unless x_differential == 0 && y_differential == 0
+        unless (x_differential == 0 && y_differential == 0)
           results << add(coord,[x_differential, y_differential])
         end
       end

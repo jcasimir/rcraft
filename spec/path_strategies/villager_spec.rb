@@ -26,7 +26,9 @@ describe PathStrategy::Villager do
       end
     end
 
-    def blocked?(coords); false; end
+    def blocked?(coords)
+      !terrain_at(coords).walkable?
+    end
   end
 
   class DummyVillager
