@@ -35,5 +35,9 @@ module PathStrategy
     def ==(other)
       self.path == other
     end
+
+    def count
+      path.count
+    end
   end
 end

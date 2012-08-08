@@ -47,11 +47,24 @@ describe "Villager moves" do
   context "when it encounters a simple obstruction" do
     it "goes around it" do
       board.place(villager, [0,0])
-      board.make_terrain(:water, [0,1])
+      board.make_terrain(:water, [1,0])
       villager.move_to([2,0])
       villager.time_to_move.times{ board.tick }
       board.coordinates_for(villager).should_not == [1,0]
       villager.time_to_move.times{ board.tick }
+      board.coordinates_for(villager).should == [2,0]
+    end
+  end
+
+  context "when it encounters a complext obstruction" do
+    it "goes around it" do
+      board.place(villager, [0,0])
+      board.make_terrain(:water, [1,0])
+      board.make_terrain(:water, [1,1])
+      board.make_terrain(:water, [2,1])
+      board.make_terrain(:water, [3,1])
+      villager.move_to([2,0])
+      (villager.path.count * villager.time_to_move).times{ board.tick }
       board.coordinates_for(villager).should == [2,0]
     end
   end

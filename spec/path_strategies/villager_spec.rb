@@ -25,6 +25,8 @@ describe PathStrategy::Villager do
         DummyWalkable.new
       end
     end
+
+    def blocked?(coords); false; end
   end
 
   class DummyVillager
@@ -50,7 +52,6 @@ describe PathStrategy::Villager do
       let(:target){ [3,0] }
 
       it "returns the correct moves" do
-        pending
         villager.path_to(target).should == [[1,0], [1,0], [1,0]]
       end
     end
@@ -59,7 +60,6 @@ describe PathStrategy::Villager do
       let(:target){ [0,3] }
 
       it "returns the correct moves" do
-        pending
         villager.path_to(target).should == [[0,1], [0,1], [0,1]]
       end
     end

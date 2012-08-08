@@ -1,11 +1,13 @@
 class PriorityQueue
+  attr_accessor :queue
+
   def initialize
-    @list = []
+    @queue = []
   end
 
   def add(priority, item)
-    @list << [priority, @list.length, item]
-    @list.sort!
+    self.queue << [priority, queue.length, item]
+    queue.sort!
     self
   end
 
@@ -14,10 +16,10 @@ class PriorityQueue
   end
 
   def next
-    @list.shift[2]
+    queue.shift[2]
   end
 
   def any?
-    @list.any?
+    queue.any?
   end
 end

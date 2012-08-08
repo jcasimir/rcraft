@@ -64,6 +64,10 @@ class Board
     terrain[coordinates] || Terrain::Land.new
   end
 
+  def blocked?(coordinates)
+    !terrain_at(coordinates).walkable?
+  end
+
 private
   def build_grid(size)
     self.x_max, self.y_max = size

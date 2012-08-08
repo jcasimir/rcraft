@@ -1,11 +1,9 @@
+require 'set'
+
 module PathStrategy
   module AStar
     def self.adjacency(coords)
       CoordinateCalculator.surrounding(coords)
-    end
-
-    def self.cost(coords, board)
-      board.terrain_at(coords).walkable? ? 0 : 1
     end
 
     def self.distance(start, finish)
@@ -13,29 +11,24 @@ module PathStrategy
     end
 
     def self.find_path(start, goal, board)
-      been_there = {}
+      past = Set.new
       queue = PriorityQueue.new
-      queue << [1, [start, [], 0]]
-      result = nil
+      queue << [1, [start, []]]
 
       while queue.any?
-        spot, path_so_far, cost_so_far = queue.next
+        current, path = queue.next
         
-        unless been_there[spot]      
-          newpath = path_so_far + [spot]
+        unless past.include?(current)
+          test_path = path << current
 
-          if spot == goal
-            return Path.new_from_absolutes(newpath)
+          if current == goal
+            return Path.new_from_absolutes(test_path)
           else
-            been_there[spot] = true
+            past << current
 
-            adjacency(spot).each do |newspot|
-              next if been_there[newspot]
-              tcost = cost(newspot, board)
-              next unless tcost
-              newcost = cost_so_far + tcost
-              queue << [newcost + distance(goal, newspot),
-                         [newspot, newpath, newcost]]
+            adjacency(current).each do |target|
+              next if (past.include?(target) || board.blocked?(target))
+              queue << [distance(goal, target), [target, test_path]]
             end
           end
         end
