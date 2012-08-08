@@ -1,8 +1,22 @@
 module PathStrategy
   module Villager
-    attr_accessor :path
+    attr_accessor :path, :pathfinder
 
     def path_to(target)
+      AStar.find_path(current_position, target, board)
+    end
+
+    def current_position
+      board.coordinates_for(self)
+    end
+
+    def traversable_from(start)
+      CoordinateCalculator.surrounding(start).select do |coords|
+        board.terrain_at(coords).walkable?
+      end
+    end
+
+    def simple_path_to(target)
       start = board.coordinates_for(self)
       x_differential = target.first - start.first
       y_differential = target.last - start.last

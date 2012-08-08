@@ -21,6 +21,28 @@ describe Board do
     end
   end
 
+  context "#valid_coordinates?" do
+    it "is true with coordinates in the grid" do
+      board.valid_coordinates?([0,0]).should be
+    end
+
+    it "is false with coordinates off the negative x" do
+      board.valid_coordinates?([-1,0]).should_not be
+    end
+
+    it "is false with coordinates off the negative y" do
+      board.valid_coordinates?([0,-1]).should_not be
+    end
+
+    it "is false with coordinates too far in the x" do
+      board.valid_coordinates?([201,0]).should_not be
+    end
+
+    it "is false with coordinates too far in the y" do
+      board.valid_coordinates?([0,201]).should_not be
+    end
+  end
+
   class DummyBuilding
     def placed_on(board); end
   end

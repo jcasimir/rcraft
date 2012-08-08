@@ -6,7 +6,7 @@ module Movable
   end
 
   def move_to(coordinates)
-    self.path = path_to(coordinates)
+    self.path = path_to(coordinates) if board.valid_coordinates?(coordinates)
   end
 
   def attempt_to_move
@@ -17,7 +17,7 @@ module Movable
   end
 
   def moving?
-    !path.empty?
+    path && path.any?
   end
 
   def next_move

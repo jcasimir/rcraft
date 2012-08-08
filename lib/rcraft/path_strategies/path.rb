@@ -6,6 +6,16 @@ module PathStrategy
       @path = moves
     end
 
+    def self.new_from_absolutes(moves)
+      previous = moves.shift
+      offsets = moves.collect do |target|
+        offset = CoordinateCalculator.offset(previous, target)
+        previous = target
+        offset
+      end
+      PathStrategy::Path.new(offsets)
+    end
+
     def next
       path.last
     end
@@ -16,6 +26,10 @@ module PathStrategy
 
     def empty?
       path.empty?
+    end
+
+    def any?
+      path.any?
     end
 
     def ==(other)

@@ -1,5 +1,5 @@
 class Board
-  attr_accessor :size, :entities, :grid, :terrain
+  attr_accessor :size, :entities, :grid, :terrain, :x_max, :y_max
 
   DEFAULT_SIZE = [100,100]
 
@@ -23,6 +23,13 @@ class Board
   def coordinates_for(entity)
     coords, e = grid.detect{|coordinates, entities| entities.include?(entity)}
     return coords
+  end
+
+  def valid_coordinates?(coords)
+    (coords.first >= 0) && 
+    (coords.last  >= 0) &&
+    (coords.first <= x_max) &&
+    (coords.last <= y_max)
   end
 
   def entities_at(coordinates)
@@ -54,12 +61,12 @@ class Board
   end
 
   def terrain_at(coordinates)
-    terrain[coordinates]
+    terrain[coordinates] || Terrain::Land.new
   end
 
 private
   def build_grid(size)
-    x_max, y_max = size
+    self.x_max, self.y_max = size
     set = {}
     (0..x_max).each do |x|
       (0..y_max).each do |y|
