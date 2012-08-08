@@ -3,5 +3,9 @@ module Terrain
     def walkable?
       false
     end
+
+    def water?
+      true
+    end
   end
 end
