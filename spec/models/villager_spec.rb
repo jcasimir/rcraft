@@ -29,6 +29,12 @@ describe Villager do
     end
   end
 
+  context "#to_key" do
+    it "is :villager" do
+      villager.to_key == :villager
+    end
+  end
+
   context "#training_time_remaining" do
     it "goes from the build time to zero" do
       villager.training_time_remaining.should == home.training_time_for(:villager)

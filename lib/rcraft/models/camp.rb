@@ -1,11 +1,12 @@
 class Camp
   attr_accessor :player, :dimensions, :training_times, :in_progress, 
-                :training_slots, :training_queue, :board
+                :training_slots, :training_queue, :board, :balance
 
   DEFAULT_DIMENSIONS = [2,2]
   DEFAULT_TRAINING_TIMES = { :villager => 20000 }
   DEFAULT_TRAINING_SLOTS = 1
   DEFAULT_TRAINING_COSTS = { :villager => 400 }
+  DEFAULT_STARTING_BALANCE = 2000
 
   def initialize(player = nil)
     @player = player
@@ -15,6 +16,7 @@ class Camp
     @in_progress = []
     @training_queue = []
     @cost_to_train = DEFAULT_TRAINING_COSTS
+    @balance = DEFAULT_STARTING_BALANCE
   end
 
   def tick
@@ -28,13 +30,16 @@ class Camp
   end
 
   def create_villager
-    Villager.new(self).tap do |v| 
-      enqueue v
-      move_from_queue
+    if balance >= cost_to_train(:villager)
+      Villager.new(self).tap do |v| 
+        enqueue v
+        move_from_queue
+      end
     end
   end
 
   def enqueue(entity)
+    self.balance -= cost_to_train(entity.to_key)
     self.training_queue << entity
   end
 

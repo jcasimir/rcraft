@@ -37,4 +37,8 @@ class Villager
   def placed_on(board)
     self.board = board
   end
+
+  def to_key
+    :villager
+  end
 end

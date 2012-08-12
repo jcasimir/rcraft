@@ -55,6 +55,27 @@ describe Camp do
     end
   end
 
+  context "#balance" do
+    it "fetches the current balance" do
+      camp.balance = 2000
+      camp.balance.should == 2000
+    end
+  end
+
+  context "#enqueue" do
+    class DummyVillager
+      def to_key; :villager; end
+    end
+
+    it "adds the entity to the build queue" do
+      expect{ camp.enqueue DummyVillager.new }.to change{ camp.training_queue }
+    end
+
+    it "subtracts the cost from the current balance" do
+      expect{ camp.enqueue DummyVillager.new }.to change{ camp.balance }
+    end
+  end
+
   context "#tick" do
     it "advances any pending builds" do
       villager = camp.create_villager
