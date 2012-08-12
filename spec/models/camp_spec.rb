@@ -46,6 +46,15 @@ describe Camp do
     end
   end
 
+  context "#cost_to_train" do
+    it "returns a currency quantity" do
+      camp.set_cost_to_train(:villager, 400)
+      camp.cost_to_train(:villager).should == 400
+      camp.set_cost_to_train(:villager, 100)
+      camp.cost_to_train(:villager).should == 100
+    end
+  end
+
   context "#tick" do
     it "advances any pending builds" do
       villager = camp.create_villager

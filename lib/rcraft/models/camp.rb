@@ -5,6 +5,7 @@ class Camp
   DEFAULT_DIMENSIONS = [2,2]
   DEFAULT_TRAINING_TIMES = { :villager => 20000 }
   DEFAULT_TRAINING_SLOTS = 1
+  DEFAULT_TRAINING_COSTS = { :villager => 400 }
 
   def initialize(player = nil)
     @player = player
@@ -13,6 +14,7 @@ class Camp
     @training_slots = DEFAULT_TRAINING_SLOTS
     @in_progress = []
     @training_queue = []
+    @cost_to_train = DEFAULT_TRAINING_COSTS
   end
 
   def tick
@@ -42,6 +44,14 @@ class Camp
 
   def training_time_for(entity)
     training_times[entity]
+  end
+
+  def cost_to_train(entity_type)
+    @cost_to_train[entity_type]
+  end
+
+  def set_cost_to_train(entity_type, cost)
+    @cost_to_train[entity_type] = cost
   end
 
   def spawn_entity(entity)
