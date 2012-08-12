@@ -18,7 +18,7 @@ describe Terrain::Map do
     end
 
     it "sets multiple tiles to water" do
-      map = Terrain::Map.new(:dimensions => [10,1])
+      map = Terrain::Map.new(:dimensions => [4,1])
       map[[0,0]].should_not be_water
       map[[1,0]].should_not be_water
       map.water_at([0,0], [1,0])
@@ -29,8 +29,8 @@ describe Terrain::Map do
 
   describe "#total_tiles" do
     it "counts tiles based on dimensions" do
-      map = Terrain::Map.new(:dimensions => [10,2])
-      map.total_tiles.should == 20
+      map = Terrain::Map.new(:dimensions => [2,5])
+      map.total_tiles.should == 10
     end
   end
 
@@ -40,8 +40,8 @@ describe Terrain::Map do
     end
 
     it "accepts and uses dimensions" do
-      map = Terrain::Map.new(:dimensions => [200, 100])
-      map.dimensions.should == [200,100]
+      map = Terrain::Map.new(:dimensions => [2, 3])
+      map.dimensions.should == [2,3]
     end
 
     it "uses default dimensions" do
@@ -55,16 +55,13 @@ describe Terrain::Map do
     end
 
     it "uses a water coverage percentage" do
-      map = Terrain::Map.new(:dimensions => [200, 200],
-                                           :seed => 1024,
-                                           :water_coverage => 80)
-      map.water_coverage.should == 80
+      map = Terrain::Map.new(:water_coverage => 20,
+                             :dimensions => [5,5])
+      map.water_coverage.should == 20
     end
 
     it "generates a map with no water" do
-      map = Terrain::Map.new(:dimensions => [200, 200],
-                                           :seed => 1024,
-                                           :water_coverage => 0)
+      map = Terrain::Map.new(:water_coverage => 0)
       map.water_coverage.should == 0
     end
 
@@ -73,7 +70,39 @@ describe Terrain::Map do
     end
 
     it "generates different maps when the seed changes" do
-      Terrain::Map.new(:seed => 10).should_not == Terrain::Map.new(:seed => 9)
+      Terrain::Map.new(:seed => 1, :water_coverage => 10, :dimensions => [10,10]).should_not == 
+        Terrain::Map.new(:seed => 2, :water_coverage => 10, :dimensions => [10,10])
+    end
+  end
+
+  describe "#==" do
+    it "equals another map with the same tile types at the same coordinates" do
+      map = Terrain::Map.new(:dimensions => [2,2])
+      map.water_at([0,0], [1,0])
+      map2 = Terrain::Map.new(:dimensions => [2,2])
+      map2.water_at([0,0], [1,0])
+      map.should == map2
+    end
+
+    it "does not equal another map with different tile types at the same coordinates" do
+      map = Terrain::Map.new(:dimensions => [2,2])
+      map.water_at([0,0], [1,0])
+      map2 = Terrain::Map.new(:dimensions => [2,2])
+      map2.water_at([0,0], [1,1])
+      map.should_not == map2
+    end
+  end
+
+  describe "#to_s" do
+    it "can represent all-land maps" do
+      map = Terrain::Map.new(:dimensions => [2,2])
+      map.to_s.should == "LL\nLL"
+    end
+
+    it "can represent mixed maps" do
+      map = Terrain::Map.new(:dimensions => [2,2])
+      map.water_at([0,0],[1,1])
+      map.to_s.should == " L\nL "
     end
   end
 end

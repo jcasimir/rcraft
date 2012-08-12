@@ -1,14 +1,18 @@
+require 'digest/sha2'
+
 module Terrain
   class Map
-    attr_accessor :dimensions, :seed, :tiles
+    attr_accessor :dimensions, :seed, :tiles, :water_coverage_percentage
 
-    DEFAULT_DIMENSIONS = [5,10]
+    DEFAULT_DIMENSIONS = [5,5]
+    DEFAULT_WATER_COVERAGE_PERCENTAGE = 0
 
     def initialize(params = {})
       @dimensions = params[:dimensions] || DEFAULT_DIMENSIONS
-      @seed = params[:seed]
+      @seed = params[:seed] || rand(10000)
       @tiles = {}
-      build_tiles(params[:water_coverage])
+      @water_coverage_percentage = params[:water_coverage] || DEFAULT_WATER_COVERAGE_PERCENTAGE
+      build_tiles
     end
 
     def water_coverage
@@ -29,11 +33,25 @@ module Terrain
       dimensions.first * dimensions.last
     end
 
+    def ==(other)
+      tiles.all? do |coords, tile|
+        tile == other[coords]
+      end
+    end
+
+    def to_s
+      (0...dimensions.first).collect do |x|
+        (0...dimensions.last).collect do |y|
+          tiles[[x,y]].to_s
+        end.join
+      end.join("\n")
+    end
+
   private
 
-    def build_tiles(water_coverage = nil)
+    def build_tiles
       build_land
-      build_water(water_coverage)
+      build_water
     end
 
     def build_land
@@ -44,12 +62,40 @@ module Terrain
       end      
     end
 
-    def build_water(water_coverage)
-      if water_coverage
-        quantity = (total_tiles * water_coverage)/100
-        water_targets = tiles.keys.sample(quantity)
-        water_targets.each do |w|
-          tiles[w] = Water.new
+    def build_water
+      quantity = (total_tiles * water_coverage_percentage)/100
+      shuffled = TileSorter.shuffle_select(tiles, seed, quantity)
+      watered = 0
+      orphan_cycle = 2
+      until watered == quantity
+        if orphan_cycle == 0
+          threshold = 2
+          orphans = tiles.select do |coords, tile|
+            tile && !tile.water? && 
+            (CoordinateCalculator.surrounding(coords).count{ |c| 
+              (tiles[c] && tiles[c].land?) } <= threshold)
+          end
+
+          orphans.each do |o_coords, tile|
+            if watered < quantity
+              tiles[o_coords] = Water.new
+              watered += 1
+            end
+          end
+
+          orphan_cycle = 2
+        else
+          orphan_cycle -= 1
+        end
+
+        target = shuffled.shift.first
+        close_surrounds = CoordinateCalculator.surrounding(target, 2)
+        distant_surrounds = CoordinateCalculator.surrounding(target, 4).shuffle.take(rand(49))
+        (target + close_surrounds + distant_surrounds).each do |coords|
+          if watered < quantity && tiles[coords] && !tiles[coords].water?
+            tiles[coords] = Water.new
+            watered += 1
+          end
         end
       end
     end
