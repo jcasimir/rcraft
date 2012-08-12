@@ -39,8 +39,9 @@ class Camp
   end
 
   def enqueue(entity)
-    if balance >= cost_to_train(entity.to_key)
-      self.balance -= cost_to_train(entity.to_key)
+    entity_cost = cost_to_train(entity.to_key)
+    if balance >= entity_cost
+      self.balance -= entity_cost
       self.training_queue << entity
     end
   end

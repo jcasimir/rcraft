@@ -5,6 +5,10 @@ module Movable
     moving_timer.period
   end
 
+  def time_to_move_to(coordinates)
+    path_to(coordinates).count * time_to_move
+  end
+
   def move_to(coordinates)
     self.path = path_to(coordinates) if board.valid_coordinates?(coordinates)
   end
