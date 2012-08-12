@@ -64,15 +64,35 @@ describe Camp do
 
   context "#enqueue" do
     class DummyVillager
-      def to_key; :villager; end
+      def to_key
+        :villager
+      end
     end
 
-    it "adds the entity to the build queue" do
-      expect{ camp.enqueue DummyVillager.new }.to change{ camp.training_queue }
+    let(:villager){ DummyVillager.new }
+
+    context "with sufficient balance" do
+      before(:each) do
+        camp.balance = camp.cost_to_train(villager.to_key)
+      end
+
+      it "adds the entity to the build queue" do
+        expect{ camp.enqueue villager }.to change{ camp.training_queue }
+      end
+
+      it "subtracts the cost from the current balance" do
+        expect{ camp.enqueue villager }.to change{ camp.balance }
+      end
     end
 
-    it "subtracts the cost from the current balance" do
-      expect{ camp.enqueue DummyVillager.new }.to change{ camp.balance }
+    context "with insufficient balance" do
+      before(:each) do
+        camp.balance = camp.cost_to_train(villager.to_key) - 1
+      end
+      
+      it "cannot queue" do
+        expect{ camp.enqueue villager }.to_not change{ camp.training_queue }
+      end
     end
   end
 
