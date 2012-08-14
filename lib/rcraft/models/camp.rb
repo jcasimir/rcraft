@@ -1,6 +1,8 @@
 class Camp
   attr_accessor :player, :dimensions, :training_times, :in_progress, 
-                :training_slots, :training_queue, :board, :balance
+                :training_slots, :training_queue, :board, :balance, :spawn_location
+
+  include Blocker
 
   DEFAULT_DIMENSIONS = [2,2]
   DEFAULT_TRAINING_TIMES = { :villager => 20000 }
@@ -27,6 +29,10 @@ class Camp
   def placed_on(board)
     player.buildings << self
     self.board = board
+  end
+
+  def location
+    board.coordinates_for(self)
   end
 
   def create_villager
@@ -65,6 +71,20 @@ class Camp
   def spawn_entity(entity)
     in_progress.delete(entity)
     player.add_entity(entity)
+    board.place(entity, spawn_location)
+  end
+
+  def spawn_location
+    return @spawn_location if @spawn_location
+    surrounding_coordinates.reverse.detect{|c| board.open?(c)}
+  end
+
+  def surrounding_coordinates
+    occupied_coordinates.collect{|c| CoordinateCalculator.surrounding(c)}.flatten(1).uniq.sort - occupied_coordinates
+  end
+
+  def occupied_coordinates
+    CoordinateCalculator.occupied_coordinates(location, dimensions)
   end
 
   def training_slots_open?
@@ -73,6 +93,10 @@ class Camp
 
   def training_slots_open
     training_slots - in_progress.count
+  end
+
+  def depository?
+    true
   end
 
 private

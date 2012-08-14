@@ -3,6 +3,7 @@ class Villager
 
   DEFAULT_TIME_TO_GATHER_RESOURCES = 2000
   DEFAULT_RESOURCE_GATHER_RATE = 10
+  DEFAULT_GATHERING_DISTANCE = 1
   DEFAULT_TIME_TO_MOVE = 500
 
   include PathStrategy::Villager
@@ -18,6 +19,13 @@ class Villager
     @resource_gather_rate = DEFAULT_RESOURCE_GATHER_RATE
     @gathering_timer = Timer.new(DEFAULT_TIME_TO_GATHER_RESOURCES)
     @moving_timer = Timer.new(DEFAULT_TIME_TO_MOVE)
+    @gathering_distance = DEFAULT_GATHERING_DISTANCE
+  end
+
+  def defaults
+    {:gathering_distance => 1,
+     :maximum_resources  => 100,
+     :deposit_distance   => 1}
   end
 
   def villager?
@@ -27,10 +35,10 @@ class Villager
   def tick
     if in_training?
       self.training_time_remaining -= 1
-    elsif gathering?
-      self.attempt_to_gather
     elsif moving?
       self.attempt_to_move
+    elsif gathering?
+      self.attempt_to_gather
     end
   end
 

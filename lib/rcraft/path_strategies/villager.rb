@@ -2,8 +2,8 @@ module PathStrategy
   module Villager
     attr_accessor :path, :pathfinder
 
-    def path_to(target)
-      AStar.find_path(current_position, target, board)
+    def path_to(target, range = 0)
+      AStar.find_path(current_position, target, board, range)
     end
 
     def current_position

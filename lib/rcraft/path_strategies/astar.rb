@@ -10,7 +10,7 @@ module PathStrategy
       CoordinateCalculator.distance_between(start, finish)
     end
 
-    def self.find_path(start, goal, board)
+    def self.find_path(start, goal, board, range = 0)
       past = Set.new
       queue = PriorityQueue.new
       queue << [1, [start, []]]
@@ -22,8 +22,9 @@ module PathStrategy
           test_path = path << current
 
           if current == goal
-            test_path.shift
-            return Path.new(test_path)
+            redundant_goal_coordinates = test_path.shift
+            ranged_path = test_path[0..-(1 + range)]
+            return Path.new(ranged_path)
           else
             past << current
 

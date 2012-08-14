@@ -1,6 +1,23 @@
 module Gatherer
   attr_accessor :gathering_timer, :resource_gather_rate,
-                :gathering_at, :resources
+                :gathering_at, :resources, :gathering_distance,
+                :maximum_resources
+
+  def gathering_distance
+    @gathering_distance ||= defaults[:gathering_distance]
+  end
+
+  def maximum_resources
+    @maximum_resources ||= defaults[:maximum_resources]
+  end
+
+  def resources_full?
+    resources_value >= maximum_resources
+  end
+
+  def can_gather?
+    !resources_full?
+  end
 
   def time_to_gather_resources
     gathering_timer.period
@@ -11,11 +28,18 @@ module Gatherer
   end
 
   def resources_value
-    resources.map(&:value).inject(:+) || 0
+    resources ? resources.map(&:value).inject(0, :+) : 0
+  end
+
+  def within_gathering_range_of?(coordinates)
+    CoordinateCalculator.distance_between(self.current_location, coordinates).to_i <= gathering_distance
   end
 
   def gather_resources(coordinates)
     self.gathering_at = coordinates
+    unless within_gathering_range_of?(coordinates)
+      move_within_range_of(coordinates, gathering_distance) 
+    end
   end
 
   def gathering?
@@ -28,5 +52,15 @@ module Gatherer
       deposit = board.resource_at(gathering_at)
       resources << deposit.gather(resource_gather_rate)
     end
+    if resources_full?
+      self.destination = nearest_depository
+      move_within_range_of(destination.location, defaults[:deposit_distance])
+    end
+  end
+
+  def nearest_depository
+    player.depositories.sort_by do |dep| 
+      time_to_move_to(dep.location)
+    end.first
   end
 end

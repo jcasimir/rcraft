@@ -19,6 +19,17 @@ module CoordinateCalculator
     return results
   end
 
+  def self.occupied_coordinates(coord, dimensions)
+    results = []
+    x, y = dimensions
+    (0...x).each do |x_differential|
+      (0...y).each do |y_differential|
+        results << add(coord,[x_differential, y_differential])
+      end
+    end
+    return results.sort
+  end
+
   def self.distance_between(start, finish)
     Math.hypot(*offset(start,finish))
   end

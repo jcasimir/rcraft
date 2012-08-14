@@ -1,6 +1,7 @@
 require 'rcraft/version'
 require 'rcraft/lib/coordinate'
 require 'rcraft/lib/coordinate_calculator'
+require 'rcraft/lib/blocker'
 require 'rcraft/lib/movable'
 require 'rcraft/lib/gatherer'
 require 'rcraft/lib/trainable'

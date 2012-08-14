@@ -14,6 +14,12 @@ describe Camp do
     end
   end
 
+  context "#depository?" do
+    it "is a depository" do
+      camp.should be_depository
+    end
+  end
+
   context "#dimensions" do
     it "is 2x2" do
       camp.dimensions.should == [2,2]
@@ -101,34 +107,5 @@ describe Camp do
       villager = camp.create_villager
       expect{ camp.tick }.to change{ villager.training_time_remaining }
     end
-
-    class CompletedTraining
-      def trained?; true; end
-      def tick; end
-    end
-
-    let(:completed_training){ CompletedTraining.new }
-
-    it "spawns completed trainings" do
-      camp.in_progress << completed_training
-      camp.in_progress.should include(completed_training)
-      camp.tick
-      camp.in_progress.should_not include(completed_training)
-    end
-  end
-
-  context "#spawn_entity" do
-    let(:player){ double(:player) }
-    let(:camp_with_player){ Camp.new(player) }
-    let!(:villager){ camp_with_player.create_villager }
-
-    it "removes the entity from the build queue" do
-      camp_with_player.in_progress.should include(villager)
-      player.should_receive(:add_entity).with(villager)
-      camp_with_player.spawn_entity(villager)
-      camp_with_player.in_progress.should_not include(villager)
-    end
-
-    it "puts the entity on the board"
   end
 end

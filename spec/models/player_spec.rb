@@ -20,6 +20,28 @@ describe Player do
     end
   end
 
+  context "#depositories" do
+    class DummyDepository
+      def depository?; true; end
+    end
+
+    class DummyNondepository
+      def depository?; false; end
+    end
+
+    it "finds the depositories" do
+      depository = DummyDepository.new
+      player.buildings << depository
+      player.buildings << DummyNondepository.new
+      player.depositories.count.should == 1
+      player.depositories.first.should == depository
+    end
+
+    it "finds a depository when there is one" do
+
+    end
+  end
+
   context "#add_entity" do
     class DummyVillager
       def villager?

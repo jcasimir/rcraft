@@ -56,6 +56,12 @@ describe PathStrategy::Villager do
       it "returns the correct moves" do
         villager.path_to(target).should == [[1,0], [2,0], [3,0]]
       end
+
+      context "when given a range" do
+        it "only goes within range" do
+          villager.path_to(target, 1).should == [[1,0], [2,0]]
+        end
+      end
     end
 
     context "when the path is a straight, unobstructed Y-axis line" do

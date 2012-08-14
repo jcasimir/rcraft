@@ -45,6 +45,8 @@ describe Board do
 
   class DummyBuilding
     def placed_on(board); end
+
+    def depository?; true; end
   end
 
   context "with no buildings" do

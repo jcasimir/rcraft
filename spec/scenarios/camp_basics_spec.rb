@@ -6,15 +6,17 @@ describe "Placing a Camp" do
   let(:board){ game.board }
   let(:camp){ Camp.new(player) }
 
-  def build_camp(coordinates = [0,0])
-    board.place(camp, coordinates)
+  before(:each) do
+    board.place(camp, [0,0])
+    game.tick
   end
 
-  before(:each) do
-    game.tick
-    build_camp
-    game.tick
+  describe "#location" do
+    it "finds the correct coordinates" do
+      camp.location.should == [0,0]
+    end
   end
+  
 
   it "builds a camp" do
     player.buildings.count.should == 1
@@ -61,6 +63,45 @@ describe "Placing a Camp" do
       camp.in_progress.should_not include(villager_1)
       camp.in_progress.should include(villager_2)
       camp.balance.should == balance - 2*camp.cost_to_train(:villager)
+    end
+  end
+
+  context "camp#spawn_entity" do
+    let!(:villager){ camp.create_villager }
+
+    it "removes the entity from the build queue" do
+      camp.in_progress.should include(villager)
+      player.should_receive(:add_entity).with(villager)
+      camp.spawn_entity(villager)
+      camp.in_progress.should_not include(villager)
+    end
+
+    it "puts the entity on the board" do
+      camp.spawn_entity(villager)
+      villager.current_location.should be
+    end
+  end
+
+  context "camp#spawn_location" do
+    context "when surrounded by open space" do
+      it "finds the bottom right corner coordinate outside the camp itself" do
+        camp.spawn_location.should == [2,2]
+      end  
+    end
+  end
+
+  context "camp#surrounding_coordinates" do
+    it "finds a list of all the coordinates around the camp" do
+      camp.surrounding_coordinates.should == 
+        [              [2,0],
+                       [2,1],
+         [0,2], [1,2], [2,2]].sort
+    end
+  end
+
+  context "camp#occupied_coordinates" do
+    it "finds the occupied coordinates" do
+      camp.occupied_coordinates.should == [[0,0], [1,0], [0,1], [1,1]].sort
     end
   end
 end

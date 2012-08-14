@@ -13,4 +13,7 @@ class Player
     self.villagers << entity if entity.villager?
   end
 
+  def depositories
+    buildings.select{|b| b.depository?}
+  end
 end
