@@ -1,8 +1,6 @@
 class ResourceDeposit
   attr_accessor :value
 
-  include Blocker
-
   def initialize(value)
     @value = value
   end

@@ -65,8 +65,8 @@ class Board
 
   def blocked?(coordinates)
     !valid_coordinates?(coordinates)   ||
-    !terrain_at(coordinates).walkable? 
-    #entities_at(coordinates).any?{|e| e.blocker?}
+    !terrain_at(coordinates).walkable? ||
+    entities_at(coordinates).any?{|e| e.respond_to?(:blocker?) && e.blocker?}
   end
 
   def open?(coordinates)

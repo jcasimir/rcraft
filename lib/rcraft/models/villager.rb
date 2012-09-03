@@ -10,6 +10,7 @@ class Villager
   include Movable
   include Gatherer
   include Trainable
+  include Blocker
 
   def initialize(home, &block)
     @home = home

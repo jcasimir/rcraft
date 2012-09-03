@@ -92,7 +92,9 @@ describe Board do
       board.coordinates_for(villager).should == [2,2]
     end
 
-    it "does not find an unspawned entity"
+    it "does not find an unspawned entity" do
+      board.coordinates_for(villager).should_not be
+    end
   end
 
   context "#move" do

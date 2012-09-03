@@ -88,6 +88,15 @@ describe "Placing a Camp" do
         camp.spawn_location.should == [2,2]
       end  
     end
+
+    context "when the first choice spot it occupied" do
+      it "finds a second choice" do
+        v = camp.create_villager
+        board.place(v, [2,2])
+        v.current_location.should == [2,2]
+        camp.spawn_location.should == [2,1]
+      end
+    end
   end
 
   context "camp#surrounding_coordinates" do

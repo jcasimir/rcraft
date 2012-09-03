@@ -2,8 +2,6 @@ class Camp
   attr_accessor :player, :dimensions, :training_times, :in_progress, 
                 :training_slots, :training_queue, :board, :balance, :spawn_location
 
-  include Blocker
-
   DEFAULT_DIMENSIONS = [2,2]
   DEFAULT_TRAINING_TIMES = { :villager => 20000 }
   DEFAULT_TRAINING_SLOTS = 1
@@ -75,7 +73,6 @@ class Camp
   end
 
   def spawn_location
-    return @spawn_location if @spawn_location
     surrounding_coordinates.reverse.detect{|c| board.open?(c)}
   end
 
