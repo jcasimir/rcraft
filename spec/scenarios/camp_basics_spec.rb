@@ -17,7 +17,6 @@ describe "Placing a Camp" do
     end
   end
   
-
   it "builds a camp" do
     player.buildings.count.should == 1
     board.entities.count.should == 1
