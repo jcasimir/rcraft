@@ -15,6 +15,28 @@ describe ResourceDeposit do
     end
   end
 
+  describe "#available?" do
+    context "when there are gathering spots" do
+      before(:each) do
+        resource.gatherers = []
+      end
+
+      it "is" do
+        resource.should be_available
+      end
+    end
+
+    context "when there are no spots remaining" do
+      before(:each) do
+        resource.gatherers = (1..resource.maximum_gatherers).map{ "Gatherer" }
+      end
+
+      it "is not" do
+        resource.should_not be_available
+      end
+    end
+  end
+
   context "#gather" do
     it "fetches a ResourcePack" do
       resource.gather(2).should be_a(ResourcePack)

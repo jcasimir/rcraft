@@ -98,14 +98,16 @@ describe Board do
   end
 
   context "#move" do
-    it "moves the entity to the new relative position" do
+    before(:each) do
       board.place(villager, [2,2])
+    end
+
+    it "moves the entity to the new relative position" do
       board.move(villager, [4,4])
       board.coordinates_for(villager).should == [4,4]
     end
 
     it "does not leave the entity in the old position" do
-      board.place(villager, [2,2])
       board.move(villager, [4,4])
       board.entities_at([2,2]).should_not include(villager)
     end

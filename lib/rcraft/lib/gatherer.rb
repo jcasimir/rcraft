@@ -48,14 +48,25 @@ module Gatherer
 
   def attempt_to_gather
     gathering_timer.tick
-    if gathering_timer.ready?
-      deposit = board.resource_at(gathering_at)
+    gather if gathering_timer.ready?
+    return_to_depository if resources_full?
+  end
+
+  def gather
+    if deposit.available?
+      deposit.add_gatherer(self)
       resources << deposit.gather(resource_gather_rate)
     end
-    if resources_full?
-      self.destination = nearest_depository
-      move_within_range_of(destination.location, defaults[:deposit_distance])
-    end
+  end
+
+  def return_to_depository    
+    deposit.remove_gatherer(self)
+    self.destination = nearest_depository
+    move_within_range_of(destination.location, defaults[:deposit_distance])
+  end
+
+  def deposit
+    @deposit ||= board.resource_at(gathering_at)
   end
 
   def nearest_depository

@@ -15,9 +15,17 @@ class Board
   end
 
   def place(entity, coordinates)
-    grid[coordinates] << entity
+    raise "Entity already placed" if entities.include?(entity)
     entities << entity
     entity.placed_on(self)
+    grid[coordinates] << entity
+  end
+
+  def move(entity, coordinates)
+    raise "Entity not yet placed" if !entities.include?(entity)
+    current = coordinates_for(entity)
+    grid[current].delete(entity)
+    grid[coordinates] << entity
   end
 
   def coordinates_for(entity)
@@ -49,12 +57,6 @@ class Board
     grid[coordinates] << resource
   end
 
-  def move(entity, target)
-    current = coordinates_for(entity)
-    grid[current].delete(entity)
-    grid[target] << entity
-  end
-
   def make_terrain(type, coordinates)
     self.terrain[coordinates] = Terrain::Builder.build(type)
   end
@@ -71,6 +73,10 @@ class Board
 
   def open?(coordinates)
     !blocked?(coordinates)
+  end
+
+  def inspect
+    self.to_s
   end
 
 private
