@@ -108,6 +108,17 @@ describe "Villager Gathers Resources" do
         villager.resources_value.should > 0
       end
     end
+
+    context "when the resource runs out" do
+      it "stops" do
+        resource.value = 10
+        board.move(villager, [4,0])
+        villager.gather_resources([5,0])
+        expect(villager).to be_gathering
+        (2 * villager.time_to_gather_resources).times{ villager.tick }
+        expect(villager.gathering?).to_not be
+      end
+    end
   end
 
   context "villager#nearest_depository" do

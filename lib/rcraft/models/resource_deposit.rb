@@ -14,7 +14,7 @@ class ResourceDeposit
   end
 
   def resources?
-    true
+    value > 0
   end
 
   def add_gatherer(gatherer)

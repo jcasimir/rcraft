@@ -9,9 +9,18 @@ describe ResourceDeposit do
     end
   end
 
-  context "#resources?" do
-    it "is" do
-      resource.should be_resources
+  describe "#resources?" do
+    context "with value left" do
+      it "is" do
+        resource.should be_resources
+      end
+    end
+
+    context "with no value left" do
+      it "is false" do
+        resource.value = 0
+        expect(resource).to_not be_resources
+      end
     end
   end
 

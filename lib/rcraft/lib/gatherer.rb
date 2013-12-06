@@ -43,7 +43,7 @@ module Gatherer
   end
 
   def gathering?
-    gathering_at
+    gathering_at && deposit.resources?
   end
 
   def attempt_to_gather
