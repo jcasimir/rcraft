@@ -23,6 +23,7 @@ require 'rcraft/models/villager'
 require 'rcraft/models/resource_deposit'
 require 'rcraft/models/resource_pack'
 require 'rcraft/models/timer'
+require 'rcraft/visualizers/text'
 
 module Rcraft
   # Your code goes here...
